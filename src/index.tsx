@@ -1,18 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import * as esbuild from 'esbuild-wasm';
+import { unpkgPathPlugin } from './esbuild-plugin';
 
 const App = () => {
     const [userInput, setUserInput] = useState('');
     const [code, setCode] = useState('');
     const ref = useRef<any>();
-    
+
     const esbuildService = async () => {
         ref.current = await esbuild.startService({
             worker: true,
             wasmURL: './esbuild.wasm'
         });
-    }
+    };
 
     useEffect(() => {
         esbuildService();
@@ -22,11 +23,13 @@ const App = () => {
         if(!ref.current) {
             return;
         }
-        let result = await ref.current.transform(userInput, {
-            loader: 'jsx',
-            target: 'es2015'
+        let result = await ref.current.build({
+            entryPoints: ['index.tsx'],
+            bundle: true,
+            write: false,
+            plugins: [unpkgPathPlugin()]
         });
-        setCode(result.code);
+        setCode(result.outputFiles[0].text);
     };
 
     return (
