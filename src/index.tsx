@@ -27,7 +27,7 @@ const App = () => {
             entryPoints: ['index.tsx'],
             bundle: true,
             write: false,
-            plugins: [unpkgPathPlugin()],
+            plugins: [unpkgPathPlugin(userInput)],
             define: {
                 'process.env.NODE_ENV': '"production"',
                 global: 'window'

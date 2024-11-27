@@ -4,7 +4,7 @@ import localForage from 'localforage';
 
 const webDb = localForage.createInstance({ name: 'webDb' });
 
-export const unpkgPathPlugin = () => {
+export const unpkgPathPlugin = (userInput: string) => {
   return {
     name: 'unpkg-path-plugin',
     setup(build: esbuild.PluginBuild) {
@@ -39,10 +39,7 @@ export const unpkgPathPlugin = () => {
         if (args.path === 'index.tsx') {
           return {
             loader: 'jsx',
-            contents: `
-              import message from 'nested-test-pkg';
-              console.log(message);
-            `,
+            contents: userInput,
           };
         }
         const cachedResult = await webDb.getItem(args.path);
@@ -54,7 +51,7 @@ export const unpkgPathPlugin = () => {
           contents: data,
           resolveDir: new URL('./', request.responseURL).pathname
         }
-        
+
         await webDb.setItem(args.path, result);
         return result;
       });
