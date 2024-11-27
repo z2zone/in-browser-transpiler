@@ -1,15 +1,19 @@
 import * as esbuild from 'esbuild-wasm';
 import axios from 'axios';
+import localForage from 'localforage';
+
+const webDb = localForage.createInstance({ name: 'webDb' });
 
 export const unpkgPathPlugin = () => {
   return {
     name: 'unpkg-path-plugin',
     setup(build: esbuild.PluginBuild) {
 
+      //resolve import / require logic -> replace with unpkg 
       build.onResolve({ filter: /.*/ }, async (args: any) => {
         console.log('onResolve', args);
 
-        //first looks at index
+        //first look at index
         if(args.path === 'index.tsx'){
           return { path: args.path, namespace: 'a' };
         }
@@ -41,13 +45,18 @@ export const unpkgPathPlugin = () => {
             `,
           };
         }
+        const cachedResult = await webDb.getItem(args.path);
+        if(cachedResult) return cachedResult;
+   
         const { data, request } = await axios.get(args.path);
-        
-        return {
+        const result = {
           loader: 'jsx',
           contents: data,
           resolveDir: new URL('./', request.responseURL).pathname
         }
+        
+        await webDb.setItem(args.path, result);
+        return result;
       });
     }, 
   };
