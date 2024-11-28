@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import * as esbuild from 'esbuild-wasm';
 import { unpkgPathPlugin } from './esbuild-plugin';
+import { loadPlugin } from './load-plugin';
 
 const App = () => {
     const [userInput, setUserInput] = useState('');
@@ -27,7 +28,10 @@ const App = () => {
             entryPoints: ['index.tsx'],
             bundle: true,
             write: false,
-            plugins: [unpkgPathPlugin(userInput)],
+            plugins: [
+                unpkgPathPlugin(),
+                loadPlugin(userInput)
+            ],
             define: {
                 'process.env.NODE_ENV': '"production"',
                 global: 'window'
