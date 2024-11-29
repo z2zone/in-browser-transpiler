@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import * as esbuild from 'esbuild-wasm';
 import axios from 'axios';
 import localForage from 'localforage';
@@ -17,22 +17,22 @@ export const loadPlugin = (userInput: string) => {
                 };
             });
 
-            build.onLoad({ filter: /.css$/ }, async(args:any) => {
-                const cachedResult = await webDb.getItem(args.path);
+            build.onLoad({ filter: /.*/ }, async(args) => {
+                const cachedResult = await webDb.getItem<>(args.path);
                 if(cachedResult) return cachedResult;
+            });
+
+            build.onLoad({ filter: /.css$/ }, async(args) => {
 
                 const { data, request } = await axios.get(args.path);
-
                 let escaped = data
                     .replace(/\n/g, '')
                     .replace(/"/g, '\\"')
                     .replace(/'/g, "\\'");
-
                 let contents = 
                     `const style = document.createElement('style');
                     style.innerText = '${escaped}';
                     document.head.appendChild(style);`;
-                
                 let result = {
                     loader: 'jsx',
                     contents: contents,
@@ -44,11 +44,7 @@ export const loadPlugin = (userInput: string) => {
             });
 
             build.onLoad({ filter: /.*/ }, async (args: any) => {
-                const cachedResult = await webDb.getItem(args.path);
-                if(cachedResult) return cachedResult;
-                
                 const { data, request } = await axios.get(args.path);
-
                 const result = {
                     loader: 'jsx',
                     contents: data,
