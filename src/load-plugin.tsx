@@ -18,7 +18,7 @@ export const loadPlugin = (userInput: string) => {
             });
 
             build.onLoad({ filter: /.*/ }, async(args) => {
-                const cachedResult = await webDb.getItem<>(args.path);
+                const cachedResult = await webDb.getItem(args.path);
                 if(cachedResult) return cachedResult;
             });
 
