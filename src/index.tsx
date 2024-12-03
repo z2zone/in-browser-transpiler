@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import * as esbuild from 'esbuild-wasm';
-import { unpkgPathPlugin } from './esbuild-plugin';
-import { loadPlugin } from './load-plugin';
+import { unpkgPathPlugin } from './plugins/esbuild-plugin';
+import { loadPlugin } from './plugins/load-plugin';
+import CodeEditor from './components/code-editor';
 
 const App = () => {
     const [userInput, setUserInput] = useState('');
@@ -25,6 +26,11 @@ const App = () => {
         if(!ref.current) {
             return;
         }
+        
+        // refresh iframe with basic template
+        refIframe.current.srcdoc = iframeHtml;
+
+        // fetch and resolve data using plug-ins
         let result = await ref.current.build({
             entryPoints: ['index.tsx'],
             bundle: true,
@@ -38,7 +44,8 @@ const App = () => {
                 global: 'window'
             }
         });
-        refIframe.current.srcdoc = iframeHtml;
+
+        //passing data to the iframe using postMessage
         refIframe.current.contentWindow.postMessage(result.outputFiles[0].text, "*");
     };
 
@@ -69,6 +76,10 @@ const App = () => {
 
     return (
         <div>
+            <CodeEditor 
+                initialValues='const a = 1;'
+                onChange={(value) => {setUserInput(value)}}
+            />
             <textarea 
                 value={userInput}
                 onChange={(e) => {setUserInput(e.target.value)}}
