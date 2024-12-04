@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
+
+import 'bulmaswatch/darkly/bulmaswatch.min.css';
+
 import * as esbuild from 'esbuild-wasm';
 import { unpkgPathPlugin } from './plugins/esbuild-plugin';
 import { loadPlugin } from './plugins/load-plugin';
@@ -26,7 +29,7 @@ const App = () => {
         if(!ref.current) {
             return;
         }
-        
+
         // refresh iframe with basic template
         refIframe.current.srcdoc = iframeHtml;
 
