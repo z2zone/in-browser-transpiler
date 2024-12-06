@@ -10,7 +10,7 @@ const Resizable: React.FC<Props> = ({direction, children}) => {
     return (
         <ResizableBox 
             height={300} 
-            width={300}
+            width={Infinity}
             resizeHandles={['s']}
         >
             {children}
@@ -18,4 +18,4 @@ const Resizable: React.FC<Props> = ({direction, children}) => {
     );
 };
 
-export default Resizable
+export default Resizable;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRef, useEffect } from 'react';
+import './code-preview.css';
 
 type Props = {
     code: string;
@@ -42,6 +43,7 @@ const CodePreview: React.FC<Props> = ({code}) => {
 
     return (
         <iframe
+            className="code-preview-iframe"
             title="code-bundle" 
             ref={refIframe} 
             sandbox="allow-scripts" 

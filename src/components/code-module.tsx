@@ -5,6 +5,8 @@ import CodeEditor from './code-editor';
 import CodePreview from './code-preview';
 import Resizable from './resizable';
 
+import './code-module.css';
+
 const CodeModule = () => {
     const [userInput, setUserInput] = useState('');
     const [code, setCode] = useState('');
@@ -20,14 +22,13 @@ const CodeModule = () => {
     return (
         <div>
             <Resizable direction='vertical'>
-                <CodeEditor 
-                    initialValues='const a = 1;'
-                    onChange={(value) => {setUserInput(value)}}
-                />
-                <div>
-                    <button onClick={handleOnClick}>Submit</button>
+                <div className='code-module-wrapper'>
+                    <CodeEditor 
+                        initialValues='const a = 1;'
+                        onChange={(value) => {setUserInput(value)}}
+                    />
+                    <CodePreview code={code} />
                 </div>
-                <CodePreview code={code} />
             </Resizable>
         </div>
     );
