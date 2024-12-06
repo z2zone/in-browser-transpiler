@@ -42,13 +42,15 @@ const CodePreview: React.FC<Props> = ({code}) => {
     }, [code]);
 
     return (
-        <iframe
-            className="code-preview-iframe"
-            title="code-bundle" 
-            ref={refIframe} 
-            sandbox="allow-scripts" 
-            srcDoc={iframeHtml}
-        />
+        <div className="code-preview-wrapper">
+            <iframe
+                className="code-preview-iframe"
+                title="code-bundle" 
+                ref={refIframe} 
+                sandbox="allow-scripts" 
+                srcDoc={iframeHtml}
+            />
+        </div>
     );
 }
 
