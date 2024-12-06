@@ -3,6 +3,7 @@ import { useState } from 'react';
 import bundler from '../bundler/bundler';
 import CodeEditor from './code-editor';
 import CodePreview from './code-preview';
+import Resizable from './resizable';
 
 const CodeModule = () => {
     const [userInput, setUserInput] = useState('');
@@ -18,14 +19,16 @@ const CodeModule = () => {
 
     return (
         <div>
-            <CodeEditor 
-                initialValues='const a = 1;'
-                onChange={(value) => {setUserInput(value)}}
-            />
-            <div>
-                <button onClick={handleOnClick}>Submit</button>
-            </div>
-            <CodePreview code={code} />
+            <Resizable direction='vertical'>
+                <CodeEditor 
+                    initialValues='const a = 1;'
+                    onChange={(value) => {setUserInput(value)}}
+                />
+                <div>
+                    <button onClick={handleOnClick}>Submit</button>
+                </div>
+                <CodePreview code={code} />
+            </Resizable>
         </div>
     );
 }
